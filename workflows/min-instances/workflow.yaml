@@ -1,0 +1,43 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+main:
+  params: [args]
+  # Example arguments:
+  #   { "region": "europe-west1", "service": "hello-world", "minInstances": 1 }
+  steps:
+    - init:
+        assign:
+          - project: ${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          - region: ${args.region}
+          - service: ${args.service}
+          - minInstances: ${args.minInstances}
+    - getService:
+        call: googleapis.run.v2.projects.locations.services.get
+        args:
+          name: ${"projects/" + project + "/locations/" + region + "/services/" + service}
+        result: service
+    - updateMinInstances: # Update the service object and change minInstances
+        assign:
+          - service.launchStage: "ALPHA" # As of January 2023, service-level minimum instances is still in Preview
+          - service.scaling: {} # To avoid a null pointer if the scaling property was previously unset
+          - service.scaling.minInstanceCount: ${string(minInstances)}
+    - updateService: # Submit the updated service object
+        call: googleapis.run.v2.projects.locations.services.patch
+        args:
+          name: ${"projects/" + project + "/locations/" + region + "/services/" + service}
+          body: ${service}
+        result: updateResult
+    - returnOutput:
+        return: "${updateResult}"

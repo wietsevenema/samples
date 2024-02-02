@@ -6,4 +6,4 @@ A repository to collect Google Cloud samples
 
 | Sample | Showing | 
 | --- | --- | 
-| [Scheduled min instances](./workflows/min-instances/) | Update minimum instances of a Cloud Run service on a schedule |
+| [Set service-level minimum instances](./workflows/min-instances/) | Update minimum instances of a Cloud Run service with a workflow |
