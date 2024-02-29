@@ -45,6 +45,9 @@ The first request to a new instance will take some extra setup time because Gemm
 
 For the full Ollama API, refer to [the API docs](https://github.com/ollama/ollama/blob/main/docs/api.md).
 
+## Is it any good? 
+Turns out that the token rate isn't half bad. Here's `gemma:2b` on an 8 CPU instance:
+![Animated GIF that shows calling generate and showing how fast the tokens return](./run-gemma2b.gif "Showing token rate")
 
 ## Clean up
 To clean up after following this short tutorial, you can do the following:
