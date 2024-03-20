@@ -24,7 +24,7 @@ Building the container takes roughly 3 minutes.
 Once the command completes, the deploy command shows the public URL of the service. For convenience, store the URL in an environment variable:
 
 ```
-$URL=https://...run.app
+URL=$(gcloud run services list --format "value(URL)" --filter metadata.name=ollama-gemma)
 ```
 
 ## Explore the API
